@@ -255,7 +255,7 @@ public class Analyzer
         int[] m = Arrays.copyOf(a,a.length);
         double var = 0;
         for (int aM : m)
-            var += Math.pow((double) aM - avg, 2);
+            var += Math.pow(aM - avg, 2);
         return Math.sqrt(var/m.length);
     }
 
@@ -287,12 +287,12 @@ public class Analyzer
         return  min;
     }
 
-    /*public static void main(String[] args){
+    public static void main(String[] args){
         String[] aS = {"Larry","Curly","Moe"};
         String[] dS = {"Bonnie","Clyde",};
         int[][] results = new int[2][3];
         results[0][0] = 9;results[0][1]=7;results[0][2]=6;
         results[1][0] = 2;results[1][1]=3;results[1][2]=6;
         new Analyzer(results,aS,dS);
-    }*/
+    }
 }

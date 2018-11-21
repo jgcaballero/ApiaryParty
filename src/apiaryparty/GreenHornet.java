@@ -38,6 +38,7 @@ public class GreenHornet extends Attacker {
 	/**
 	 * If you need to initialize anything, do it  here
 	 */
+	@Override
 	protected void initialize(){
 		r = new Random();
 	}

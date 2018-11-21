@@ -40,6 +40,7 @@ public class BumbleBeeMan extends Attacker {
 	/**
 	 * If you need to initialize anything, do it  here
 	 */
+	@Override
 	protected void initialize(){
 		r = new Random();
 	}
@@ -49,6 +50,7 @@ public class BumbleBeeMan extends Attacker {
 	 * This is where your logic goes
 	 * @return the action your attacker wants to do
 	 */
+	@Override
 	public AttackerAction makeAction() {
         if(availableNodes.size()==0)
             return new AttackerAction(AttackerActionType.INVALID,0);
@@ -60,6 +62,7 @@ public class BumbleBeeMan extends Attacker {
 	 * The result of your action is updated here if you want to do anything with it. The network will be updated anyway.
 	 * @param lastNode the node if successfully attacked
 	 */
+	@Override
 	protected void result(Node lastNode) {
 		// TODO Auto-generated method stub
 		

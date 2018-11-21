@@ -39,6 +39,7 @@ public class Beedrill extends Attacker {
 	/**
 	 * If you need to initialize anything, do it  here
 	 */
+	@Override
 	protected void initialize(){
 		r = new Random();
 	}
@@ -47,6 +48,7 @@ public class Beedrill extends Attacker {
 	 * This is called by the game master while your agent still has funds. You return an action.
 	 * @return your action
 	 */
+	@Override
 	public AttackerAction makeAction() {
 		AttackerActionType type;		
 		int nodeID = -1;
@@ -89,6 +91,7 @@ public class Beedrill extends Attacker {
 	 * The game master is giving you the result of the action.
 	 * @param  lastNode the node successfully attacked
 	 */
+	@Override
 	protected void result(Node lastNode) {
 		
 	}

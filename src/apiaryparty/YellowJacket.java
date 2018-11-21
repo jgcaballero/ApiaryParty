@@ -40,6 +40,7 @@ public class YellowJacket extends Attacker {
 	/**
 	 * If you need to initialize anything, do it  here
 	 */
+	@Override
 	protected void initialize(){
 		r = new Random();
 	}
@@ -49,6 +50,7 @@ public class YellowJacket extends Attacker {
 	 * Overide this
 	 * @return the action you agent wants to do
 	 */
+	@Override
 	public AttackerAction makeAction() {
 		Random r = new Random();
         if(availableNodes.size()==0)
@@ -72,6 +74,7 @@ public class YellowJacket extends Attacker {
 	 * The result of your action is updated here if you want to do anything with it. The network will be updated anyway.
 	 * @param lastNode the node if successfully attacked
 	 */
+	@Override
 	protected void result(Node lastNode) {
 		// TODO Auto-generated method stub
 		

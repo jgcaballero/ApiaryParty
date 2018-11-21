@@ -327,6 +327,7 @@ public class Node
 	 * @param o the node to compare with
 	 * @return if the nodes are identical
 	 */
+	@Override
 	public final boolean equals(Object o){
 		Node n = (Node)o;
 		if(n.getNodeID() == nodeID)
@@ -337,6 +338,7 @@ public class Node
 	/**
 	 * Creates a copy of the Node, leaving empty the nodes. They need to be manually added!!!
 	 */
+	@Override
 	public Node clone(){
 		Node n = new Node(nodeID, sv, pv, isDatabase, isHoneyPot, captured);
 		n.setBestRoll(bestRoll);
@@ -348,6 +350,7 @@ public class Node
 	 * to string method
 	 * @return the node id as a string
 	 */
+	@Override
 	public String toString(){
 		return Integer.toString(nodeID);
 	}

@@ -30,6 +30,7 @@ public class GameMaster {
 		defenders.add(new WorkerBee("0"));
 		defenders.add(new Honeycomb("0"));
 		defenders.add(new QueenDBee("0"));
+		defenders.add(new QueenDBee("0"));
 
 		// get names of defenders
 		String[] defenderNames = new String[defenders.size()];
@@ -79,6 +80,7 @@ public class GameMaster {
 		attackers.add(new BumbleBeeMan());
 		attackers.add(new Beedrill());
 		attackers.add(new YellowJacket());
+		attackers.add(new Beerus());
 
 		// get names of attackers
 		String[] attackerNames = new String[attackers.size()];
@@ -152,8 +154,11 @@ public class GameMaster {
 
 		// invalid defender if name could not be found
 		return new Defender("", "") {
+			@Override
 			public void initialize() {}
+			@Override
 			public void actionResult(boolean actionSuccess) {}
+			@Override
 			public DefenderAction makeAction() {
 				return null;
 			}
@@ -183,13 +188,18 @@ public class GameMaster {
 			return new YellowJacket(defName, file);
 
 		// add your attacker here
-
+		if (atName.equalsIgnoreCase("Beerus"))
+			return new Beerus(defName, file);
+		
 		// in case your name was not added
 		return new Attacker("", "", "") {
+			@Override
 			protected void initialize() {}
+			@Override
 			public AttackerAction makeAction() {
 				return null;
 			}
+			@Override
 			protected void result(Node lastNode) {}
 		};
 	}
