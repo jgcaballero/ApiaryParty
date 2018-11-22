@@ -33,15 +33,11 @@ public class Beerus extends Attacker{
 				nodeID = x.getNodeID();
 				return new AttackerAction(AttackerActionType.PROBE_POINTS, nodeID);
 			}			
-			if(x.getPv() == -1) {
-				nodeID = x.getNodeID();
-				return new AttackerAction(AttackerActionType.PROBE_POINTS, nodeID);
-			}
 			if(x.knowsHoneyPot() == false) {
 				nodeID = x.getNodeID();
 				return new AttackerAction(AttackerActionType.PROBE_HONEYPOT, nodeID);
 			}
-			if(x.getPv() != -1 && x.getSv() != 1) {
+			if(x.getSv() != 1) {
 				if(x.getSv() < 17 && !x.isHoneyPot()) {
 					nodeID = x.getNodeID();
 					return new AttackerAction(AttackerActionType.ATTACK, nodeID);
