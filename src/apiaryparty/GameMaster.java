@@ -30,7 +30,7 @@ public class GameMaster {
 		defenders.add(new WorkerBee("0"));
 		defenders.add(new Honeycomb("0"));
 		defenders.add(new QueenDBee("0"));
-		defenders.add(new Defender1("0"));
+		defenders.add(new Legion("0"));
 
 		// get names of defenders
 		String[] defenderNames = new String[defenders.size()];
@@ -148,8 +148,8 @@ public class GameMaster {
 			return new QueenDBee(file);
 
 		// add your defender
-		if (name.equalsIgnoreCase("Defender1"))
-			return new QueenDBee(file);
+		if (name.equalsIgnoreCase("Legion"))
+			return new Legion(file);
 
 		// invalid defender if name could not be found
 		return new Defender("", "") {

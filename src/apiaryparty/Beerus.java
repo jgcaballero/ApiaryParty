@@ -24,21 +24,38 @@ public class Beerus extends Attacker{
 	public AttackerAction makeAction() {
 		Random r = new Random();
         if(availableNodes.size()==0)
-            return new AttackerAction(AttackerActionType.INVALID,0);
+            return new AttackerAction(AttackerActionType.END_TURN, 0);
 		int nodeID = availableNodes.get(r.nextInt(availableNodes.size())).getNodeID();
-		int move = r.nextInt(4);
-		AttackerActionType type;
-		if(move == 0)
-			type = AttackerActionType.ATTACK;
-		else if(move == 1)
-			type = AttackerActionType.SUPERATTACK;
-		else if(move == 2)
-			type = AttackerActionType.PROBE_POINTS;
-		else if(move == 3)
-			type = AttackerActionType.PROBE_HONEYPOT;
-		else
-			type = AttackerActionType.INVALID;
-		return new AttackerAction(type, nodeID);
+		
+		for(Node x: availableNodes)
+		{
+			if (x.getSv() == -1 ) {
+				nodeID = x.getNodeID();
+				return new AttackerAction(AttackerActionType.PROBE_POINTS, nodeID);
+			}			
+			if(x.getPv() == -1) {
+				nodeID = x.getNodeID();
+				return new AttackerAction(AttackerActionType.PROBE_POINTS, nodeID);
+			}
+			if(x.knowsHoneyPot() == false) {
+				nodeID = x.getNodeID();
+				return new AttackerAction(AttackerActionType.PROBE_HONEYPOT, nodeID);
+			}
+			if(x.getPv() != -1 && x.getSv() != 1) {
+				if(x.getSv() < 17 && !x.isHoneyPot()) {
+					nodeID = x.getNodeID();
+					return new AttackerAction(AttackerActionType.ATTACK, nodeID);
+				} else if (x.getSv() >= 18 && !x.isHoneyPot())
+					return new AttackerAction(AttackerActionType.SUPERATTACK, nodeID); 
+			}
+			if(availableNodes.size()==0)
+	            return new AttackerAction(AttackerActionType.END_TURN, 0);
+
+		}
+		
+		return new AttackerAction(AttackerActionType.END_TURN, nodeID); 
+
+		
 	}
 	
 	@Override

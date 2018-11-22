@@ -2,13 +2,13 @@ package apiaryparty;
 
 import java.util.Random;
 
-public class Defender1 extends Defender {
+public class Legion extends Defender {
 
 	Random r;
 	
-	   public Defender1(String graphFile)
+	   public Legion(String graphFile)
 	   {
-	        super("Defender1",graphFile);
+	        super("Legion",graphFile);
 	   }
 
 	   @Override
@@ -27,8 +27,6 @@ public class Defender1 extends Defender {
 			int honeyNode = r.nextInt(net.getAvailableNodes().size());
 			int honeypotCost = honeypotCost(honeyNode);
 	        int node = r.nextInt(net.getSize());
-
-			System.out.println("WHAT IS THIS HONEYPOT COST FAM?" + honeypotCost+  "=======================================");
 
 			if(getBudget() > honeypotCost)
 				return new DefenderAction(DefenderActionType.HONEYPOT, honeyNode);
