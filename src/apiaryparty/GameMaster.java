@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @version 2017/11/14
  */
 public class GameMaster {
-	
+
 	/**
 	 * Runs the tournament
 	 * 
@@ -30,7 +30,7 @@ public class GameMaster {
 		defenders.add(new WorkerBee("0"));
 		defenders.add(new Honeycomb("0"));
 		defenders.add(new QueenDBee("0"));
-		defenders.add(new QueenDBee("0"));
+		defenders.add(new Defender1("0"));
 
 		// get names of defenders
 		String[] defenderNames = new String[defenders.size()];
@@ -44,36 +44,35 @@ public class GameMaster {
 				tryDefender(new DefenderDriver(PlayerState.INIT, defender));
 				boolean execute = true;
 				DefenderMonitor dm = new DefenderMonitor(defender);
-				
+
 				String defense = "";
-				do{ //While defender has money and has not ended turn
+				do { // While defender has money and has not ended turn
 					tryDefender(new DefenderDriver(PlayerState.MAKE_ACTION, defender));
 					DefenderAction action = defender.getLastAction();
-					
-					if(action != null){
+
+					if (action != null) {
 						dm.applyAction(action);
-						if(action.getType() != DefenderActionType.END_TURN){
+						if (action.getType() != DefenderActionType.END_TURN) {
 							tryDefender(new DefenderDriver(PlayerState.RESULT, defender, true));
 							defense += action.toString();
-						}
-						else{//end turn
+						} else {// end turn
 							execute = false;
 						}
-					}else{
+					} else {
 						tryDefender(new DefenderDriver(PlayerState.RESULT, defender, false));
 
 					}
-					//System.out.println(defender.getBudget());
-				}while(execute && defender.getBudget() > 0 );
-				new DefenderMonitor(defender.getName(), g+"",defense);
-				//new DefenderMonitor(defender.getName(), defender.getGraph());
-				dm.getNetwork().setName(defenderNames[d]+"-"+g);
+					// System.out.println(defender.getBudget());
+				} while (execute && defender.getBudget() > 0);
+				new DefenderMonitor(defender.getName(), g + "", defense);
+				// new DefenderMonitor(defender.getName(), defender.getGraph());
+				dm.getNetwork().setName(defenderNames[d] + "-" + g);
 				dm.getNetwork().printNetwork();
-				dm.getNetwork().shuffleNetwork();//comment this out for testing
+				dm.getNetwork().shuffleNetwork();// comment this out for testing
 				dm.getNetwork().printHiddenNetwork();
 			}
 		}
-		
+
 		// add Attackers here
 		ArrayList<Attacker> attackers = new ArrayList<Attacker>();
 		attackers.add(new GreenHornet());
@@ -97,18 +96,18 @@ public class GameMaster {
 				String attackerName = attackerNames[a];
 				for (int g = 0; g < numGames; g++) {
 					String graphName = g + "";
-					AttackerMonitor am = new AttackerMonitor(attackerName,defenderName, graphName);
-					Attacker attacker = getAttacker(defenderName,attackerName, graphName);
+					AttackerMonitor am = new AttackerMonitor(attackerName, defenderName, graphName);
+					Attacker attacker = getAttacker(defenderName, attackerName, graphName);
 					tryAttacker(new AttackerDriver(PlayerState.INIT, attacker));
 					while (am.getBudget() > 0) {
 						tryAttacker(new AttackerDriver(PlayerState.MAKE_ACTION, attacker));
-						if(attacker.getLastAction() == null)
+						if (attacker.getLastAction() == null)
 							continue;
 						Network visible = am.readMove(attacker.getLastAction());
-						if(visible == null)
+						if (visible == null)
 							continue;
 						tryAttacker(new AttackerDriver(PlayerState.RESULT, attacker, visible));
-						System.out.println("Budget after move: "+ am.getBudget());
+						System.out.println("Budget after move: " + am.getBudget());
 						System.out.println();
 					}
 					am.close();
@@ -118,14 +117,13 @@ public class GameMaster {
 		}
 		// perform analysis
 		new Analyzer(points, attackerNames, defenderNames);
-		
+
 	}
 
 	/**
 	 * Generates graphs
 	 * 
-	 * @param numGraphs
-	 *            the number of graphs to generate
+	 * @param numGraphs the number of graphs to generate
 	 */
 	public static void generateGraphs(int numGraphs) {
 		for (int i = 0; i < numGraphs; i++) {
@@ -137,10 +135,8 @@ public class GameMaster {
 	/**
 	 * You should edit this method to include your defender
 	 * 
-	 * @param name
-	 *            name of defender
-	 * @param file
-	 *            graph defender will read
+	 * @param name name of defender
+	 * @param file graph defender will read
 	 * @return your defender
 	 */
 	public static Defender getDefender(String name, String file) {
@@ -150,14 +146,21 @@ public class GameMaster {
 			return new Honeycomb(file);
 		if (name.equalsIgnoreCase("QeenDBee"))
 			return new QueenDBee(file);
+
 		// add your defender
+		if (name.equalsIgnoreCase("Defender1"))
+			return new QueenDBee(file);
 
 		// invalid defender if name could not be found
 		return new Defender("", "") {
 			@Override
-			public void initialize() {}
+			public void initialize() {
+			}
+
 			@Override
-			public void actionResult(boolean actionSuccess) {}
+			public void actionResult(boolean actionSuccess) {
+			}
+
 			@Override
 			public DefenderAction makeAction() {
 				return null;
@@ -168,16 +171,12 @@ public class GameMaster {
 	/**
 	 * You should edit this method to include your attacker
 	 * 
-	 * @param defName
-	 *            name of defender attacker will be pit against
-	 * @param atName
-	 *            name of defender
-	 * @param file
-	 *            graph defender will attack
+	 * @param defName name of defender attacker will be pit against
+	 * @param atName  name of defender
+	 * @param file    graph defender will attack
 	 * @return your attacker
 	 */
-	public static Attacker getAttacker(String defName, String atName,
-			String file) {
+	public static Attacker getAttacker(String defName, String atName, String file) {
 		if (atName.equalsIgnoreCase("GreenHornet"))
 			return new GreenHornet(defName, file);
 		if (atName.equalsIgnoreCase("BumbeBeeMan"))
@@ -190,65 +189,77 @@ public class GameMaster {
 		// add your attacker here
 		if (atName.equalsIgnoreCase("Beerus"))
 			return new Beerus(defName, file);
-		
+
 		// in case your name was not added
 		return new Attacker("", "", "") {
 			@Override
-			protected void initialize() {}
+			protected void initialize() {
+			}
+
 			@Override
 			public AttackerAction makeAction() {
 				return null;
 			}
+
 			@Override
-			protected void result(Node lastNode) {}
+			protected void result(Node lastNode) {
+			}
 		};
 	}
-	
+
 	/**
-	 * Tries to execute a Defender's class' method by using threads a layer of protection in case
-	 * the Defender subclasses crash or time out.
+	 * Tries to execute a Defender's class' method by using threads a layer of
+	 * protection in case the Defender subclasses crash or time out.
 	 * 
 	 * @param dDriver The thread that will ask the player to execute some code
 	 */
-	private static void tryDefender(DefenderDriver dDriver){
+	private static void tryDefender(DefenderDriver dDriver) {
 		int timeLimit;
-		if(dDriver.state == PlayerState.INIT)
+		if (dDriver.state == PlayerState.INIT)
 			timeLimit = Parameters.INIT_TIME;
-		else if(dDriver.state == PlayerState.RESULT)
+		else if (dDriver.state == PlayerState.RESULT)
 			timeLimit = Parameters.RESULT_TIME;
 		else
 			timeLimit = Parameters.ACTION_TIME;
 
 		Thread playerThread = new Thread(dDriver);
 		playerThread.start();
-		for(int sleep = 0; sleep < timeLimit; sleep+=10){
-			if(playerThread.isAlive())
-				try {Thread.sleep(10);} catch (Exception e) {e.printStackTrace();}
+		for (int sleep = 0; sleep < timeLimit; sleep += 10) {
+			if (playerThread.isAlive())
+				try {
+					Thread.sleep(10);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			else
 				return;
 		}
 	}
-	
+
 	/**
-	 * Tries to execute an Attacker's class' method by using threads a layer of protection in case
-	 * the Defender subclasses crash or time out.
+	 * Tries to execute an Attacker's class' method by using threads a layer of
+	 * protection in case the Defender subclasses crash or time out.
 	 * 
 	 * @param aDriver The thread that will ask the player to execute some code
 	 */
-	private static void tryAttacker(AttackerDriver aDriver){
+	private static void tryAttacker(AttackerDriver aDriver) {
 		int timeLimit;
-		if(aDriver.state == PlayerState.INIT)
+		if (aDriver.state == PlayerState.INIT)
 			timeLimit = Parameters.INIT_TIME;
-		else if(aDriver.state == PlayerState.RESULT)
+		else if (aDriver.state == PlayerState.RESULT)
 			timeLimit = Parameters.RESULT_TIME;
 		else
 			timeLimit = Parameters.ACTION_TIME;
 
 		Thread playerThread = new Thread(aDriver);
 		playerThread.start();
-		for(int sleep = 0; sleep < timeLimit; sleep+=10){
-			if(playerThread.isAlive())
-				try {Thread.sleep(10);} catch (Exception e) {e.printStackTrace();}
+		for (int sleep = 0; sleep < timeLimit; sleep += 10) {
+			if (playerThread.isAlive())
+				try {
+					Thread.sleep(10);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			else
 				return;
 		}
